@@ -10,13 +10,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-type Inputs = {
+type Signup = {
   name: string;
   email: string;
   phone: number;
   gender: string;
-  password: any;
-  confirmPw: any;
+  password: string;
+  confirmPw: string;
 };
 
 const SignUp = () => {
@@ -33,14 +33,14 @@ const SignUp = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<Signup>({
     defaultValues: {
       gender: "",
     },
     resolver: yupResolver(formSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Signup> = (data) => {
     console.log(data);
     reset();
   };

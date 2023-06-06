@@ -1,10 +1,12 @@
 import "./App.css";
-import SignUp from "./ui/atoms/SignUp";
+import Login from "./ui/molecules/Login";
+import SignUp from "./ui/molecules/SignUp";
 
 function App() {
   return (
     <>
       <SignUp />
+      <Login />
     </>
   );
 }
