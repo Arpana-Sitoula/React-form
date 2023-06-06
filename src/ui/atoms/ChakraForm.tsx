@@ -7,6 +7,8 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
 
 type Inputs = {
   name: string;
@@ -21,7 +23,12 @@ const ChakraForm = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      gender: "",
+    },
+  });
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
     reset();
@@ -68,6 +75,25 @@ const ChakraForm = () => {
         />
         {errors.phone?.type === "pattern" && (
           <FormErrorMessage>Invalid phone number</FormErrorMessage>
+        )}
+      </FormControl>
+
+      <FormControl isRequired isInvalid={errors.gender ? true : false}>
+        <FormLabel>Choose your gender:</FormLabel>
+        <Select
+          {...register("gender", {
+            required: true,
+          })}
+        >
+          <option disabled value="">
+            {" "}
+            Choose one option
+          </option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </Select>
+        {errors.gender?.type === "required" && (
+          <FormErrorMessage>This field is required</FormErrorMessage>
         )}
       </FormControl>
 

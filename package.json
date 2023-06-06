@@ -13,12 +13,14 @@
     "@chakra-ui/react": "^2.7.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
     "@tanstack/react-query-devtools": "^4.29.12",
     "framer-motion": "^10.12.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
-    "react-query": "^3.39.3"
+    "react-query": "^3.39.3",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
