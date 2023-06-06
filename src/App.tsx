@@ -1,14 +1,12 @@
-import './App.css'
-import ChakraForm from './ui/atoms/ChakraForm'
-
+import "./App.css";
+import SignUp from "./ui/atoms/SignUp";
 
 function App() {
   return (
     <>
-     <ChakraForm/>
+      <SignUp />
     </>
-  )
+  );
 }
 
-
-export default App
+export default App;

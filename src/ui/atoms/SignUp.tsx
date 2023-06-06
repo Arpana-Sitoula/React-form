@@ -7,17 +7,27 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 type Inputs = {
   name: string;
   email: string;
   phone: number;
   gender: string;
+  password: any;
+  confirmPw: any;
 };
 
-const ChakraForm = () => {
+const SignUp = () => {
+  const formSchema = yup.object().shape({
+    password: yup.string(),
+    confirmPw: yup
+      .string()
+      .required("Password is mendatory")
+      .oneOf([yup.ref("password")]),
+  });
+
   const {
     register,
     handleSubmit,
@@ -27,6 +37,7 @@ const ChakraForm = () => {
     defaultValues: {
       gender: "",
     },
+    resolver: yupResolver(formSchema),
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -37,7 +48,16 @@ const ChakraForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl isRequired isInvalid={errors?.name ? true : false}>
-        <FormLabel>Name</FormLabel>
+        <FormLabel>First Name</FormLabel>
+        <Input
+          type="text"
+          {...register("name", { required: true, maxLength: 20, minLength: 5 })}
+        />
+        {errors.name && <FormErrorMessage>{errors.name.type}</FormErrorMessage>}
+      </FormControl>
+
+      <FormControl isRequired isInvalid={errors?.name ? true : false}>
+        <FormLabel>Last Name</FormLabel>
         <Input
           type="text"
           {...register("name", { required: true, maxLength: 20, minLength: 5 })}
@@ -97,9 +117,43 @@ const ChakraForm = () => {
         )}
       </FormControl>
 
-      <Button type="submit">Submit</Button>
+      <FormControl>
+        <FormControl isRequired isInvalid={errors.password ? true : false}>
+          <FormLabel>Password</FormLabel>
+          <Input
+            type="password"
+            {...register("password", {
+              required: true,
+              minLength: 8,
+              pattern: new RegExp(/^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).*$/),
+            })}
+          />
+          {errors.password?.type === "required" && (
+            <FormErrorMessage>This field is required</FormErrorMessage>
+          )}
+          {errors.password?.type === "minLength" && (
+            <FormErrorMessage>Password is too short</FormErrorMessage>
+          )}
+          {errors.password?.type === "pattern" && (
+            <FormErrorMessage>
+              Password must contain number and special character
+            </FormErrorMessage>
+          )}
+        </FormControl>
+
+        <FormControl isInvalid={errors.confirmPw ? true : false}>
+          <FormLabel>Confirm Password</FormLabel>
+          <Input type="password" {...register("confirmPw")} />
+
+          {errors.confirmPw && (
+            <FormErrorMessage>Password do not match</FormErrorMessage>
+          )}
+        </FormControl>
+      </FormControl>
+
+      <Button type="submit">Sign Up</Button>
     </form>
   );
 };
 
-export default ChakraForm;
+export default SignUp;
