@@ -1,19 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ChakraProvider } from '@chakra-ui/react'
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "../src/assets/styles/main.scss";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider>
-    <QueryClientProvider client={queryClient}>
-    <App />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </ChakraProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

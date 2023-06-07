@@ -1,5 +1,4 @@
 import {
-  Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -151,7 +150,9 @@ const SignUp = () => {
         </FormControl>
       </FormControl>
 
-      <Button type="submit">Sign Up</Button>
+      <button className="btn" type="submit">
+        Sign Up
+      </button>
     </form>
   );
 };

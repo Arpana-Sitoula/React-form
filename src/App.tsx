@@ -1,12 +1,9 @@
-import "./App.css";
-import Login from "./ui/molecules/Login";
-import SignUp from "./ui/molecules/SignUp";
+import UserAuth from "./ui/organisms/UserAuth";
 
 function App() {
   return (
     <>
-      <SignUp />
-      <Login />
+      <UserAuth />
     </>
   );
 }
