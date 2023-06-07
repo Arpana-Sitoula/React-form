@@ -1,4 +1,5 @@
 import {
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -8,6 +9,7 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Asterisk from "../atoms/Asterisk";
 
 type Signup = {
   fname: string;
@@ -64,6 +66,14 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<Signup>({
     resolver: yupResolver(formSchema),
+    defaultValues: {
+      fname: "",
+      lname: "",
+      email: "",
+      gender: "",
+      password: "",
+      confirmPw: "",
+    },
   });
 
   const onSubmit: SubmitHandler<Signup> = (data) => {
@@ -71,26 +81,40 @@ const SignUp = () => {
     reset();
   };
 
+  console.log(errors?.fname, "error");
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl isRequired isInvalid={errors?.fname ? true : false}>
-        <FormLabel>First Name</FormLabel>
+      <FormControl isInvalid={errors?.fname ? true : false}>
+        <FormLabel>
+          <Flex>
+            {" "}
+            First Name <Asterisk />
+          </Flex>
+        </FormLabel>
         <Input type="text" {...register("fname")} />
-        {errors.fname && (
-          <FormErrorMessage>{errors.fname?.message}</FormErrorMessage>
-        )}
+
+        <FormErrorMessage>{errors?.fname?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isRequired isInvalid={errors?.lname ? true : false}>
-        <FormLabel>Last Name</FormLabel>
+      <FormControl isInvalid={errors?.lname ? true : false}>
+        <FormLabel>
+          <Flex>
+            Last Name <Asterisk />
+          </Flex>
+        </FormLabel>
         <Input type="text" {...register("lname")} />
         {errors.lname && (
           <FormErrorMessage>{errors.lname?.message}</FormErrorMessage>
         )}
       </FormControl>
 
-      <FormControl isRequired isInvalid={errors?.email ? true : false}>
-        <FormLabel>Email</FormLabel>
+      <FormControl isInvalid={errors?.email ? true : false}>
+        <FormLabel>
+          <Flex>
+            Email <Asterisk />
+          </Flex>
+        </FormLabel>
         <Input type="email" {...register("email")} />
         {errors.email && (
           <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
@@ -101,9 +125,7 @@ const SignUp = () => {
         <FormLabel>Phone number</FormLabel>
         <Input
           {...register("phone", {
-            pattern: new RegExp(
-              /^\+?[0-9]{1,3}[-. (]?\d{1,3}[-. )]?[-. ]?\d{1,4}[-. ]?\d{1,4}$/
-            ),
+            valueAsNumber: true,
           })}
         />
         {errors.phone && (
@@ -111,8 +133,12 @@ const SignUp = () => {
         )}
       </FormControl>
 
-      <FormControl isRequired isInvalid={errors.gender ? true : false}>
-        <FormLabel>Choose your gender:</FormLabel>
+      <FormControl isInvalid={errors.gender ? true : false}>
+        <FormLabel>
+          <Flex>
+            Choose your gender: <Asterisk />
+          </Flex>
+        </FormLabel>
         <Select
           {...register("gender", {
             required: true,
@@ -128,17 +154,12 @@ const SignUp = () => {
       </FormControl>
 
       <FormControl isInvalid={errors.password ? true : false}>
-        <FormLabel>Password</FormLabel>
-        <Input
-          type="text"
-          {...register("password", {
-            required: true,
-            minLength: 8,
-            pattern: new RegExp(
-              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-            ),
-          })}
-        />
+        <FormLabel>
+          <Flex>
+            Password <Asterisk />
+          </Flex>
+        </FormLabel>
+        <Input type="password" {...register("password")} />
 
         {errors.password && (
           <FormErrorMessage>{errors.password.message}</FormErrorMessage>
