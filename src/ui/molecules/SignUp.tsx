@@ -10,7 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 type Signup = {
-  name: string;
+  fname: string;
+  lname: string;
   email: string;
   phone: number;
   gender: string;
@@ -20,7 +21,36 @@ type Signup = {
 
 const SignUp = () => {
   const formSchema = yup.object().shape({
-    password: yup.string(),
+    fname: yup
+      .string()
+      .required("This field is required")
+      .min(2, "Too short")
+      .max(10, "Too long"),
+    lname: yup
+      .string()
+      .required("This field is required")
+      .min(2, "Too short")
+      .max(10, "Too long"),
+    email: yup
+      .string()
+      .required("This field is required")
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/,
+        "Invalid email"
+      ),
+    phone: yup
+      .string()
+      .matches(
+        /^\+?[0-9]{1,3}[-. (]?\d{1,3}[-. )]?[-. ]?\d{1,4}[-. ]?\d{1,4}$/,
+        "Invalid phone number"
+      ),
+    password: yup
+      .string()
+      .required("This field is required")
+      .matches(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Password must contain atleast 1 number and speical character"
+      ),
     confirmPw: yup
       .string()
       .required("Password is mendatory")
@@ -33,9 +63,6 @@ const SignUp = () => {
     reset,
     formState: { errors },
   } = useForm<Signup>({
-    defaultValues: {
-      gender: "",
-    },
     resolver: yupResolver(formSchema),
   });
 
@@ -46,40 +73,27 @@ const SignUp = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl isRequired isInvalid={errors?.name ? true : false}>
+      <FormControl isRequired isInvalid={errors?.fname ? true : false}>
         <FormLabel>First Name</FormLabel>
-        <Input
-          type="text"
-          {...register("name", { required: true, maxLength: 20, minLength: 5 })}
-        />
-        {errors.name && <FormErrorMessage>{errors.name.type}</FormErrorMessage>}
+        <Input type="text" {...register("fname")} />
+        {errors.fname && (
+          <FormErrorMessage>{errors.fname?.message}</FormErrorMessage>
+        )}
       </FormControl>
 
-      <FormControl isRequired isInvalid={errors?.name ? true : false}>
+      <FormControl isRequired isInvalid={errors?.lname ? true : false}>
         <FormLabel>Last Name</FormLabel>
-        <Input
-          type="text"
-          {...register("name", { required: true, maxLength: 20, minLength: 5 })}
-        />
-        {errors.name && <FormErrorMessage>{errors.name.type}</FormErrorMessage>}
+        <Input type="text" {...register("lname")} />
+        {errors.lname && (
+          <FormErrorMessage>{errors.lname?.message}</FormErrorMessage>
+        )}
       </FormControl>
 
       <FormControl isRequired isInvalid={errors?.email ? true : false}>
         <FormLabel>Email</FormLabel>
-        <Input
-          type="email"
-          {...register("email", {
-            required: true,
-            pattern: new RegExp(
-              /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/
-            ),
-          })}
-        />
-        {errors.email?.type === "required" && (
-          <FormErrorMessage>Email is required</FormErrorMessage>
-        )}
-        {errors.email?.type === "pattern" && (
-          <FormErrorMessage>Invalid email address</FormErrorMessage>
+        <Input type="email" {...register("email")} />
+        {errors.email && (
+          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
         )}
       </FormControl>
 
@@ -92,8 +106,8 @@ const SignUp = () => {
             ),
           })}
         />
-        {errors.phone?.type === "pattern" && (
-          <FormErrorMessage>Invalid phone number</FormErrorMessage>
+        {errors.phone && (
+          <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
         )}
       </FormControl>
 
@@ -111,43 +125,33 @@ const SignUp = () => {
           <option value="male">Male</option>
           <option value="female">Female</option>
         </Select>
-        {errors.gender?.type === "required" && (
-          <FormErrorMessage>This field is required</FormErrorMessage>
+      </FormControl>
+
+      <FormControl isInvalid={errors.password ? true : false}>
+        <FormLabel>Password</FormLabel>
+        <Input
+          type="text"
+          {...register("password", {
+            required: true,
+            minLength: 8,
+            pattern: new RegExp(
+              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+            ),
+          })}
+        />
+
+        {errors.password && (
+          <FormErrorMessage>{errors.password.message}</FormErrorMessage>
         )}
       </FormControl>
 
-      <FormControl>
-        <FormControl isRequired isInvalid={errors.password ? true : false}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            {...register("password", {
-              required: true,
-              minLength: 8,
-              pattern: new RegExp(/^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).*$/),
-            })}
-          />
-          {errors.password?.type === "required" && (
-            <FormErrorMessage>This field is required</FormErrorMessage>
-          )}
-          {errors.password?.type === "minLength" && (
-            <FormErrorMessage>Password is too short</FormErrorMessage>
-          )}
-          {errors.password?.type === "pattern" && (
-            <FormErrorMessage>
-              Password must contain number and special character
-            </FormErrorMessage>
-          )}
-        </FormControl>
+      <FormControl isInvalid={errors.confirmPw ? true : false}>
+        <FormLabel>Confirm Password</FormLabel>
+        <Input type="password" {...register("confirmPw")} />
 
-        <FormControl isInvalid={errors.confirmPw ? true : false}>
-          <FormLabel>Confirm Password</FormLabel>
-          <Input type="password" {...register("confirmPw")} />
-
-          {errors.confirmPw && (
-            <FormErrorMessage>Password do not match</FormErrorMessage>
-          )}
-        </FormControl>
+        {errors.confirmPw && (
+          <FormErrorMessage>Password do not match</FormErrorMessage>
+        )}
       </FormControl>
 
       <button className="btn" type="submit">

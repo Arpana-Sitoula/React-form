@@ -14,13 +14,15 @@ const UserAuth = () => {
   };
 
   return (
-    <div>
-      <div>
-        <Button onClick={handleLogin}>Login</Button>
-        <Button onClick={handleSignin}>Signup</Button>
+    <div className="card">
+      <div className="user">
+        <div>
+          <Button onClick={handleLogin}>Login</Button>
+          <Button onClick={handleSignin}>Signup</Button>
+        </div>
+        {isRegister && <SignUp />}
+        {!isRegister && <Login />}
       </div>
-      {isRegister && <SignUp />}
-      {!isRegister && <Login />}
     </div>
   );
 };

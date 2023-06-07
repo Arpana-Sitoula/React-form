@@ -47,11 +47,13 @@ const Login = () => {
       <FormControl isInvalid={errors.password ? true : false}>
         <FormLabel>Password</FormLabel>
         <Input
-          type="password"
+          type="text"
           {...register("password", {
             required: true,
             minLength: 8,
-            pattern: new RegExp(/^(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).*$/),
+            pattern: new RegExp(
+              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+            ),
           })}
         />
         {errors.password?.type === "required" && (
