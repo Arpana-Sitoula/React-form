@@ -4,12 +4,18 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  InputRightElement,
   Select,
+  Button,
+  Box,
+  InputGroup,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Asterisk from "../atoms/Asterisk";
+import { BiShow, BiHide } from "react-icons/bi";
 
 type Signup = {
   fname: string;
@@ -22,6 +28,7 @@ type Signup = {
 };
 
 const SignUp = () => {
+  const [show, setShow] = useState(false);
   const formSchema = yup.object().shape({
     fname: yup
       .string()
@@ -81,7 +88,11 @@ const SignUp = () => {
     reset();
   };
 
-  console.log(errors?.fname, "error");
+  const handleShow = () => {
+    setShow(!show);
+  };
+
+  //console.log(errors?.fname, "error");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -159,8 +170,12 @@ const SignUp = () => {
             Password <Asterisk />
           </Flex>
         </FormLabel>
-        <Input type="password" {...register("password")} />
-
+        <InputGroup>
+          <Input type={show ? "text" : "password"} {...register("password")} />
+          <InputRightElement>
+            <Box onClick={handleShow}>{show ? <BiShow /> : <BiHide />}</Box>
+          </InputRightElement>
+        </InputGroup>
         {errors.password && (
           <FormErrorMessage>{errors.password.message}</FormErrorMessage>
         )}
